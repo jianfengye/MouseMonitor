@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace MouseMonitor
 {
-    class MouseState
+    public class MouseState
     {
         public int leftClickCount;
 
@@ -18,13 +18,13 @@ namespace MouseMonitor
 
         public void recordAction(int message)
         {
-            // TODO：由于是多线程，需要加锁操作
+            // 由于是多线程，需要加锁操作
             lock (this)
             {
                 switch (message)
                 {
                     case Message.WM_LBUTTONDOWN:
-                        this.leftClickCount++;
+                        this.leftClickCount++;;
                         break;
                     case Message.WM_RBUTTONDOWN:
                         this.rightClickCount++;
@@ -36,41 +36,70 @@ namespace MouseMonitor
             }
         }
 
+        public void loadClick(DateTime time)
+        {
+            // 储存到文件，比如20130203.xml
+            string fileName = time.ToString("yyyyMMdd") + ".xml";
+
+            MouseState fileDate;
+            using (FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Read))
+            {
+                stream.Lock(0, stream.Length);
+                XmlSerializer serializer = new XmlSerializer(typeof(MouseState));
+                if (stream.Length != 0)
+                {
+                    fileDate = (MouseState)serializer.Deserialize(stream);
+                }
+                else
+                {
+                    fileDate = new MouseState();
+                }
+                this.leftClickCount = fileDate.leftClickCount;
+                this.rightClickCount = fileDate.rightClickCount;
+                this.middleClickCount = fileDate.middleClickCount;
+            }
+        }
+
         // 将action保存到文件中
         public void saveAction(DateTime time)
         {
-            int addLeftClickCount;
-            int addRightClickCount;
-            int addMiddleClickCount;
+            int leftClickCount;
+            int rightClickCount;
+            int middleClickCount;
 
             lock (this)
             {
-                addLeftClickCount = this.leftClickCount;
-                addRightClickCount = this.rightClickCount;
-                addMiddleClickCount = this.middleClickCount;
+                leftClickCount = this.leftClickCount;
+                rightClickCount = this.rightClickCount;
+                middleClickCount = this.middleClickCount;
 
-                this.leftClickCount = 0;
-                this.rightClickCount = 0;
-                this.middleClickCount = 0;
             }
 
             // 储存到文件，比如20130203.xml
             string fileName = time.ToString("yyyyMMdd") + ".xml";
-            if (!File.Exists(fileName))
+
+            MouseState fileDate;
+            using (FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
-                File.Create(fileName);
+                stream.Lock(0, stream.Length);
+                XmlSerializer serializer = new XmlSerializer(typeof(MouseState));
+                if (stream.Length != 0)
+                {
+                    fileDate = (MouseState)serializer.Deserialize(stream);
+                }
+                else
+                {
+                    fileDate = new MouseState();
+                }
+
+                fileDate.leftClickCount = leftClickCount;
+                fileDate.rightClickCount = rightClickCount;
+                fileDate.middleClickCount = middleClickCount;
+                stream.Position = 0;
+
+                XmlWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
+                serializer.Serialize(writer, fileDate);
             }
-
-            XmlSerializer serializer = new XmlSerializer(typeof(MouseState));
-            MemoryStream memStream = new MemoryStream(File.ReadAllBytes(fileName));
-            MouseState fileDate = (MouseState)serializer.Deserialize(memStream);
-
-            fileDate.leftClickCount += addLeftClickCount;
-            fileDate.rightClickCount += addRightClickCount;
-            fileDate.middleClickCount += addMiddleClickCount;
-
-            XmlWriter writer = new XmlTextWriter(fileName, Encoding.UTF8);
-            serializer.Serialize(writer, fileDate);
         }
     }
 }

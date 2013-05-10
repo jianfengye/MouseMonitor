@@ -15,5 +15,6 @@ namespace MouseMonitor
 
         // 鼠标中键按下
         public const int WM_MBUTTONDOWN = 0x207;
+
     }
 }
