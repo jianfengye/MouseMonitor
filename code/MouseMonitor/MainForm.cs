@@ -93,5 +93,13 @@ namespace MouseMonitor
             this.saveThread.Resume();
             this.formStartHook();
         }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                   
+            }
+        }
     }
 }

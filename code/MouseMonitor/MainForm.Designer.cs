@@ -49,7 +49,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(173, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(173, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -59,20 +59,20 @@
             this.stopToolStripMenuItem,
             this.startToolStripMenuItem});
             this.actionToolStripMenuItem.Name = "actionToolStripMenuItem";
-            this.actionToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.actionToolStripMenuItem.Size = new System.Drawing.Size(56, 21);
             this.actionToolStripMenuItem.Text = "Action";
             // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
@@ -81,21 +81,21 @@
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem1});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(55, 21);
             this.aboutToolStripMenuItem.Text = "About";
             // 
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(111, 22);
             this.aboutToolStripMenuItem1.Text = "About";
             // 
             // label_status
             // 
             this.label_status.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_status.Location = new System.Drawing.Point(0, 24);
+            this.label_status.Location = new System.Drawing.Point(0, 22);
             this.label_status.Name = "label_status";
-            this.label_status.Size = new System.Drawing.Size(173, 27);
+            this.label_status.Size = new System.Drawing.Size(173, 25);
             this.label_status.TabIndex = 1;
             this.label_status.Text = "工作中...";
             this.label_status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -103,44 +103,44 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(36, 64);
+            this.label1.Location = new System.Drawing.Point(36, 59);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 2;
             this.label1.Text = "左键：";
             // 
             // leftClick
             // 
             this.leftClick.AutoSize = true;
-            this.leftClick.Location = new System.Drawing.Point(77, 67);
+            this.leftClick.Location = new System.Drawing.Point(77, 62);
             this.leftClick.Name = "leftClick";
-            this.leftClick.Size = new System.Drawing.Size(13, 13);
+            this.leftClick.Size = new System.Drawing.Size(11, 12);
             this.leftClick.TabIndex = 3;
             this.leftClick.Text = "0";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(36, 87);
+            this.label3.Location = new System.Drawing.Point(36, 80);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(43, 13);
+            this.label3.Size = new System.Drawing.Size(41, 12);
             this.label3.TabIndex = 4;
             this.label3.Text = "右键：";
             // 
             // rightClick
             // 
             this.rightClick.AutoSize = true;
-            this.rightClick.Location = new System.Drawing.Point(77, 87);
+            this.rightClick.Location = new System.Drawing.Point(77, 80);
             this.rightClick.Name = "rightClick";
-            this.rightClick.Size = new System.Drawing.Size(13, 13);
+            this.rightClick.Size = new System.Drawing.Size(11, 12);
             this.rightClick.TabIndex = 5;
             this.rightClick.Text = "0";
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(173, 109);
+            this.ClientSize = new System.Drawing.Size(173, 101);
             this.Controls.Add(this.rightClick);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.leftClick);
@@ -149,7 +149,8 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "MouseMonitor";
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
