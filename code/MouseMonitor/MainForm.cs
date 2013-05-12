@@ -98,8 +98,30 @@ namespace MouseMonitor
         {
             if (FormWindowState.Minimized == this.WindowState)
             {
-                   
+                this.Hide();
+                this.notifyIcon1.Visible = true;
             }
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Visible = true;
+            this.WindowState = FormWindowState.Normal;
+            this.notifyIcon1.Visible = false;
+        }
+
+        private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string text;
+            text = "Source: https://github.com/jianfengye/MouseMonitor \n";
+            text += "Author: jianfengye110@gmail.com";
+            MessageBox.Show(text);
+        }
+
+        private void showToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ShowForm showForm = new ShowForm();
+            showForm.Visible = true;
         }
     }
 }

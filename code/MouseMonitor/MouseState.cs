@@ -16,6 +16,8 @@ namespace MouseMonitor
         
         public int middleClickCount;
 
+        private const string logFile = "log.xml";
+
         public void recordAction(int message)
         {
             // 由于是多线程，需要加锁操作
@@ -39,24 +41,26 @@ namespace MouseMonitor
         public void loadClick(DateTime time)
         {
             // 储存到文件，比如20130203.xml
-            string fileName = time.ToString("yyyyMMdd") + ".xml";
+            string fileName = MouseState.logFile;
+            string today = time.ToString("yyyyMMdd");
+            SerializableDictionary fileDatas = new SerializableDictionary();
 
-            MouseState fileDate;
             using (FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Read))
             {
                 stream.Lock(0, stream.Length);
-                XmlSerializer serializer = new XmlSerializer(typeof(MouseState));
+                XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary));
                 if (stream.Length != 0)
                 {
-                    fileDate = (MouseState)serializer.Deserialize(stream);
+                    fileDatas = (SerializableDictionary)serializer.Deserialize(stream);
                 }
                 else
                 {
-                    fileDate = new MouseState();
+                    fileDatas = new SerializableDictionary();
+                    fileDatas[today] = new MouseState();
                 }
-                this.leftClickCount = fileDate.leftClickCount;
-                this.rightClickCount = fileDate.rightClickCount;
-                this.middleClickCount = fileDate.middleClickCount;
+                this.leftClickCount = fileDatas[today].leftClickCount;
+                this.rightClickCount = fileDatas[today].rightClickCount;
+                this.middleClickCount = fileDatas[today].middleClickCount;
             }
         }
 
@@ -76,29 +80,33 @@ namespace MouseMonitor
             }
 
             // 储存到文件，比如20130203.xml
-            string fileName = time.ToString("yyyyMMdd") + ".xml";
+            string fileName = MouseState.logFile;
+            string today = time.ToString("yyyyMMdd");
 
-            MouseState fileDate;
+            SerializableDictionary fileDatas = new SerializableDictionary();
+            MouseState fileData = new MouseState();
             using (FileStream stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
                 stream.Lock(0, stream.Length);
-                XmlSerializer serializer = new XmlSerializer(typeof(MouseState));
+                XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary));
                 if (stream.Length != 0)
                 {
-                    fileDate = (MouseState)serializer.Deserialize(stream);
+                    fileDatas = (SerializableDictionary)serializer.Deserialize(stream);
                 }
                 else
                 {
-                    fileDate = new MouseState();
+                    fileDatas = new SerializableDictionary();
+                    fileDatas[today] = new MouseState();
                 }
 
-                fileDate.leftClickCount = leftClickCount;
-                fileDate.rightClickCount = rightClickCount;
-                fileDate.middleClickCount = middleClickCount;
+
+                fileDatas[today].leftClickCount = leftClickCount;
+                fileDatas[today].rightClickCount = rightClickCount;
+                fileDatas[today].middleClickCount = middleClickCount;
                 stream.Position = 0;
 
                 XmlWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-                serializer.Serialize(writer, fileDate);
+                serializer.Serialize(writer, fileDatas);
             }
         }
     }
