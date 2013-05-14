@@ -96,6 +96,10 @@ namespace MouseMonitor
                 if (stream.Length != 0)
                 {
                     fileDatas = (SerializableDictionary)serializer.Deserialize(stream);
+                    if (!fileDatas.ContainsKey(today))
+                    {
+                        fileDatas[today] = new MouseState();
+                    }
                 }
                 else
                 {
