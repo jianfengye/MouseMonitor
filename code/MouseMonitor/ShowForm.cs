@@ -41,9 +41,11 @@ namespace MouseMonitor
             using (var requestStream = new MemoryStream())
             {
                 var boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x"); //, NumberFormatInfo.InvariantInfo);
-                header = "multipart/form-data; boundary=" + boundary;
+                header = "Content-Type: multipart/form-data; boundary=" + boundary;
+                /*
                 var boundaryBuffer2 = Encoding.ASCII.GetBytes(header);
                 requestStream.Write(boundaryBuffer2, 0, boundaryBuffer2.Length);
+                */
                 boundary = "--" + boundary;
                 // Write the values
                 foreach (string name in values.Keys)
@@ -72,7 +74,7 @@ namespace MouseMonitor
                     requestStream.Write(buffer, 0, buffer.Length);
                 }
 
-                var boundaryBuffer = Encoding.ASCII.GetBytes(boundary + "--");
+                var boundaryBuffer = Encoding.ASCII.GetBytes(boundary);
                 requestStream.Write(boundaryBuffer, 0, boundaryBuffer.Length);
 
                 return requestStream.ToArray();
