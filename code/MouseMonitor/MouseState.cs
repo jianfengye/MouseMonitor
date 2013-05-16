@@ -10,13 +10,19 @@ namespace MouseMonitor
 {
     public class MouseState
     {
+
+        public MouseState()
+        {
+            this.logFile = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\mouseMonitor\\log.xml";
+        }
+        
         public int leftClickCount;
 
         public int rightClickCount;
         
         public int middleClickCount;
 
-        private const string logFile = "log.xml";
+        private string logFile;
 
         public void recordAction(int message)
         {
@@ -41,7 +47,7 @@ namespace MouseMonitor
         public void loadClick(DateTime time)
         {
             // 储存到文件，比如20130203.xml
-            string fileName = MouseState.logFile;
+            string fileName = this.logFile;
             string today = time.ToString("yyyyMMdd");
             SerializableDictionary fileDatas = new SerializableDictionary();
 
@@ -84,7 +90,7 @@ namespace MouseMonitor
             }
 
             // 储存到文件，比如20130203.xml
-            string fileName = MouseState.logFile;
+            string fileName = this.logFile;
             string today = time.ToString("yyyyMMdd");
 
             SerializableDictionary fileDatas = new SerializableDictionary();

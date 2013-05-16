@@ -26,7 +26,7 @@ namespace MouseMonitor
             List<UploadFile> files = new List<UploadFile>();
             UploadFile file = new UploadFile();
             file.Name = "log";
-            file.Filename = "log.xml";
+            file.Filename = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\mouseMonitor\\log.xml";
             file.ContentType = "text/xml";
 
             files.Add(file);

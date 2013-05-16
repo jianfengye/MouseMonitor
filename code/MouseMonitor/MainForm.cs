@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.Net;
+using System.IO;
 
 namespace MouseMonitor
 {
@@ -17,10 +19,18 @@ namespace MouseMonitor
 
         private MouseState state;
         private Thread saveThread;
+        private const string CurrentVersion = "1.0.1";
 
         public MainForm()
         {
             InitializeComponent();
+
+            // 创建文件夹  System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\mouseMonitor\\
+            string logFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\mouseMonitor";
+            if (!System.IO.Directory.Exists(logFolder))
+            {
+                System.IO.Directory.CreateDirectory(logFolder);
+            }
 
             // 启动监控服务
             mouseMonitor = new MouseMonitor();
@@ -36,6 +46,25 @@ namespace MouseMonitor
             
             // 需要读取今天的点击次数
             this.state.loadClick(DateTime.Today);
+
+
+            // 获取最新版本信息
+            string url = "http://mousemonitor.funaio.com/upgrade/info";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream receiveStream = response.GetResponseStream();
+            Encoding encode = System.Text.Encoding.GetEncoding("utf-8");
+            byte[] data = new byte[100];
+            receiveStream.Read(data, 0, 100);
+            receiveStream.Close();
+
+            string newestVersion = Encoding.UTF8.GetString(data);
+            newestVersion = newestVersion.Trim('\0');
+            if (newestVersion != CurrentVersion)
+            {
+                string message = "请到 http://mousemonitor.funaio.com/ 下载最新版本" + newestVersion;
+                MessageBox.Show(message);
+            }
         }
 
         private void formStartHook()
@@ -113,13 +142,14 @@ namespace MouseMonitor
         private void aboutToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             string text;
-            text = "Source: https://github.com/jianfengye/MouseMonitor \n";
-            text += "Author: jianfengye110@gmail.com";
+            text = "主页：http://mousemonitor.funaio.com/ \n";
+            text += "作者：jianfengye110@gmail.com";
             MessageBox.Show(text);
         }
 
         private void showToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            this.state.saveAction(DateTime.Today);
             ShowForm showForm = new ShowForm();
             showForm.Visible = true;
         }
